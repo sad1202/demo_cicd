@@ -4,7 +4,6 @@ on:
   push:
     branches: [ main ]
 
-# Cấp quyền cho GitHub Actions được quyền đẩy code lên GitHub Pages
 permissions:
   contents: read
   pages: write
@@ -32,10 +31,10 @@ jobs:
     - name: Checkout mã nguồn
       uses: actions/checkout@v4
 
-    - name: Cấu hình GitHub Pages环境
+    - name: Cấu hình GitHub Pages
       uses: actions/configure-pages@v4
 
-    - name: Đóng gói các file tĩnh (HTML/JS)
+    - name: Đóng gói các file tĩnh
       uses: actions/upload-pages-artifact@v3
       with:
         path: '.' 
