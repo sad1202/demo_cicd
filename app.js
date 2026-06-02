@@ -1,6 +1,6 @@
 // 1. Hàm tính tổng hai số thuần túy
 function add(a, b) {
-    return a + b; 
+    return a * b; 
     // Mẹo test: Nếu bạn muốn thử cho CI bị lỗi (báo đỏ), hãy sửa dấu + thành dấu - ở đây
 }
 
