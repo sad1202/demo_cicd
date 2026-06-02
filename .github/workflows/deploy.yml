@@ -1,0 +1,46 @@
+name: CI/CD GitHub Pages Demo
+
+on:
+  push:
+    branches: [ main ]
+
+# Cấp quyền cho GitHub Actions được quyền đẩy code lên GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  # ---------------- VẾ 1: CI (TÍCH HỢP LIÊN TỤC) ----------------
+  continuous-integration:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout mã nguồn
+      uses: actions/checkout@v4
+
+    - name: Cài đặt Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Chạy tự động các bài Test
+      run: node test.js
+
+  # ---------------- VẾ 2: CD (TRIỂN KHAI LIÊN TỤC) ----------------
+  continuous-deployment:
+    needs: continuous-integration # BẮT BUỘC: CI chạy thành công thì CD mới chạy
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout mã nguồn
+      uses: actions/checkout@v4
+
+    - name: Cấu hình GitHub Pages环境
+      uses: actions/configure-pages@v4
+
+    - name: Đóng gói các file tĩnh (HTML/JS)
+      uses: actions/upload-pages-artifact@v3
+      with:
+        path: '.' # Đóng gói toàn bộ thư mục hiện tại
+
+    - name: Deploy thẳng lên GitHub Pages (Đưa tới tay người dùng)
+      uses: actions/deploy-pages@v4
