@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Hệ thống CI/CD</title>
+    <script src="env-config.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 40px; text-align: center; background: #f4f4f9; }
+        .box { padding: 30px; background: white; border-radius: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); display: inline-block; margin-top: 20px; }
+        #env-badge { padding: 10px 20px; font-weight: bold; color: white; font-size: 18px; border-radius: 4px; display: inline-block; }
+        #math-result { font-size: 24px; font-weight: bold; color: #2ecc71; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div id="env-badge">Đang tải...</div>
+    <br>
+    <div class="box">
+        <h1 id="main-title">Hệ thống Quản lý Tính toán</h1>
+        <div id="math-result">Đang tính...</div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Lấy cấu hình môi trường tiêm từ file env-config.js để đổi giao diện
+        if (window.ENV_NAME) {
+            const badge = document.getElementById('env-badge');
+            badge.innerText = `MÔI TRƯỜNG: ${window.ENV_NAME}`;
+            badge.style.backgroundColor = window.ENV_COLOR;
+            document.getElementById('main-title').innerText = `Hệ thống chạy trên ${window.ENV_NAME}`;
+        }
+    </script>
+</body>
+</html>
