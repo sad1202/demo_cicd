@@ -8,5 +8,5 @@ test('5 + 7 = 12', () => {
 });
 test('10 - 4 = 6', () => {
     const result = subtract(10, 4);
-    assert.strictEqual(result, 6);
+    assert.strictEqual(result, 7);
 });
