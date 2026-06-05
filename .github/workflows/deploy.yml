@@ -1,16 +1,11 @@
-name: Full Demo Deployment vs Delivery
+name: Demo Delivery vs Deployment
 
 on:
   push:
     branches: [ main ]
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
 jobs:
-  # ================= VẾ CI: TEST TỰ ĐỘNG =================
+
   continuous-integration:
     runs-on: ubuntu-latest
     steps:
@@ -23,41 +18,28 @@ jobs:
     - name: Chạy tự động các bài Test
       run: node test.js
 
-  # ================= VẾ CD 1: CONTINUOUS DEPLOYMENT (Tự động lên thẳng bản chính thức) =================
-  continuous-deployment-production:
-    needs: continuous-integration
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout mã nguồn
-      uses: actions/checkout@v4
-
-    - name: Tạo file đánh dấu môi trường Production
-      run: |
-        echo "<script>window.ENV_NAME='PRODUCTION'; window.ENV_COLOR='#2c3e50';</script>" > env-config.js
-
-    - name: Deploy lên Production Web (Nhánh gh-pages gốc)
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        folder: '.' # Đẩy toàn bộ code hiện tại lên gốc trang web
-        branch: gh-pages
-
-  # ================= VẾ CD 2: CONTINUOUS DELIVERY (Phải bấm duyệt mới lên bản thử nghiệm) =================
   continuous-delivery-staging:
     needs: continuous-integration
     runs-on: ubuntu-latest
     environment:
-      name: staging-delivery # CHỐT CHẶN BẤM NÚT TRÊN GITHUB
+      name: staging 
     steps:
-    - name: Checkout mã nguồn
-      uses: actions/checkout@v4
+    - name: Deploy to Staging Server
+      run: echo "Đã tự động chuyển giao sản phẩm lên môi trường STAGING để QA test thử!"
 
-    - name: Tạo file đánh dấu môi trường Staging
-      run: |
-        echo "<script>window.ENV_NAME='STAGING (DELIVERY)'; window.ENV_COLOR='#e67e22';</script>" > env-config.js
+  continuous-delivery-production:
+    needs: continuous-delivery-staging
+    runs-on: ubuntu-latest
+    environment:
+      name: production-delivery 
+    steps:
+    - name: Deploy to Production via Approval
+      run: echo "Cần duyệt"
 
-    - name: Deploy lên Staging Web (Nằm trong thư mục /staging)
-      uses: JamesIves/github-pages-deploy-action@v4
-      with:
-        folder: '.'
-        branch: gh-pages
-        target-folder: staging # Ép code này chui vào thư mục /staging trên web
+
+  continuous-deployment-production:
+    needs: continuous-integration
+    runs-on: ubuntu-latest
+    steps:
+    - name: Deploy straight to Production
+      run: echo "Code tự động đẩy thẳng lên PRODUCTION của Deployment."
