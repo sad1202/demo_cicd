@@ -1,9 +1,8 @@
-name: Continuous Deployment
+name: Continuous Delivery
+
 on:
   push:
     branches: [ main ]
-# on:
-#   workflow_dispatch:
 
 permissions:
   contents: write
@@ -11,10 +10,11 @@ permissions:
   id-token: write
 
 jobs:
+
   continuous-integration:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
+    - name: Checkout mã nguồn
       uses: actions/checkout@v4
     - name: Cài đặt Node.js
       uses: actions/setup-node@v4
@@ -23,9 +23,11 @@ jobs:
     - name: Run test
       run: node test.js
 
-  continuous-deployment:
+  continuous-delivery:
     needs: continuous-integration
     runs-on: ubuntu-latest
+    environment:
+      name: production-delivery
     steps:
     - name: Checkout
       uses: actions/checkout@v4
